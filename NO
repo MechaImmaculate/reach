@@ -1,0 +1,3 @@
+Username configured: 11
+Password configured: 32
+Both configured: 11
