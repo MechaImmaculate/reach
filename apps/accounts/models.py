@@ -25,8 +25,8 @@ class UserManager(BaseUserManager):
 
 
 class User(UUIDModel, AbstractBaseUser, PermissionsMixin):
-    """Staff, clinicians, CHWs and admins. Mothers are NOT users: they are `mothers.Mother`
-    and reach the system via SMS, voice or a tokenised web link."""
+    """Staff, clinicians, CHWs and admins. Mothers are NOT staff users: they are `mothers.Mother`,
+    with an optional separate `mothers.MotherAccount` for web sign-in (see docs/06-mother-access.md)."""
 
     email = models.EmailField(unique=True)
     full_name = models.CharField(max_length=200)

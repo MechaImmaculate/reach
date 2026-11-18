@@ -1,10 +1,11 @@
 from django.conf import settings
 from django.db import models
 from django.db.models import F, Q
+from django.db.models.functions import Now
 from django.utils import timezone
 
 from apps.core.fields import EncryptedTextField
-from apps.core.models import TimeStampedModel
+from apps.core.models import TimeStampedModel, UUIDModel
 
 
 class MotherQuerySet(models.QuerySet):
@@ -142,3 +143,35 @@ class MotherFacilityAccess(TimeStampedModel):
             ),
         ]
         indexes = [models.Index(fields=["facility", "mother"], name="mfa_facility_mother_idx")]
+
+
+class MotherAccount(TimeStampedModel):
+    """Optional web sign-in for a mother. NOT a staff User: separate session, no roles, no workspace.
+    Created by the facility that registered her; she activates it with a one-time code."""
+
+    class Status(models.TextChoices):
+        INVITED = "invited"
+        ACTIVE = "active"
+        SUSPENDED = "suspended"
+
+    mother = models.OneToOneField(Mother, on_delete=models.PROTECT, related_name="account")
+    status = models.CharField(max_length=10, choices=Status, default=Status.INVITED)
+    enabled_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.PROTECT, related_name="+")
+    enabled_at = models.DateTimeField(default=timezone.now)
+    activated_at = models.DateTimeField(null=True, blank=True)
+    last_login_at = models.DateTimeField(null=True, blank=True)
+
+
+class MotherLoginCode(UUIDModel):
+    """One-time sign-in code. Only a keyed hash is stored; rows are short-lived and may be purged."""
+
+    account = models.ForeignKey(MotherAccount, on_delete=models.CASCADE, related_name="login_codes")
+    code_hash = models.CharField(max_length=64)
+    created_at = models.DateTimeField(db_default=Now(), editable=False)
+    expires_at = models.DateTimeField()
+    attempts = models.PositiveSmallIntegerField(default=0)
+    consumed_at = models.DateTimeField(null=True, blank=True)
+    ip = models.GenericIPAddressField(null=True, blank=True)
+
+    class Meta:
+        indexes = [models.Index(fields=["account", "created_at"], name="mlogincode_account_time_idx")]

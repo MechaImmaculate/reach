@@ -1,0 +1,25 @@
+{% extends "web/base.html" %}
+{% block title %}Choose a workspace · Reach{% endblock %}
+{% block content %}
+<section class="auth">
+  <div class="wrap">
+    <div class="section-head">
+      {% if choices %}
+        <h1>Choose a workspace</h1>
+        <p class="lede">You have more than one role. You can switch at any time.</p>
+      {% else %}
+        <h1>No workspace assigned</h1>
+        <p class="lede">Your account is active, but it has no current role. Ask your facility administrator to assign one.{% if user.is_staff %} Platform administrators can use the <a href="/admin/">admin console</a>.{% endif %}</p>
+      {% endif %}
+    </div>
+    {% if choices %}
+    <div class="grid grid-3">
+      {% for key, w in choices %}
+      <a class="card" href="{% url w.url %}"><h3>{{ w.label }}</h3><p>{{ w.blurb }}</p><p class="card-link">Open →</p></a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <form method="post" action="{% url 'web:logout' %}" style="margin-top:2rem">{% csrf_token %}<button class="btn btn-ghost" type="submit">Sign out</button></form>
+  </div>
+</section>
+{% endblock %}

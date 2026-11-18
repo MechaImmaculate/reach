@@ -13,13 +13,17 @@ INSTALLED_APPS = [
     "django.contrib.messages", "django.contrib.admin", "django.contrib.gis", "pgtrigger",
     "apps.core", "apps.accounts", "apps.geo", "apps.facilities", "apps.mothers", "apps.consent",
     "apps.care", "apps.ai", "apps.comms", "apps.triage", "apps.referrals", "apps.appointments",
-    "apps.followups", "apps.chw", "apps.spatial", "apps.audit",
+    "apps.followups", "apps.chw", "apps.spatial", "apps.audit", "django.contrib.staticfiles", "apps.web"
 ]
 AUTH_USER_MODEL = "accounts.User"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 USE_TZ = True
 TIME_ZONE = "Africa/Nairobi"
 ROOT_URLCONF = "config.urls"
+STATIC_URL = "static/"
+LOGIN_URL = "/accounts/login/"
+SESSION_COOKIE_AGE = 8 * 60 * 60
+REACH_CONTACT_EMAIL = "immaculate@reach.com"
 
 DATABASES = {
     "default": {
@@ -39,6 +43,7 @@ REACH_BLIND_INDEX_CURRENT = 1
 TEMPLATES = [{"BACKEND": "django.template.backends.django.DjangoTemplates", "APP_DIRS": True,
   "OPTIONS": {"context_processors": ["django.template.context_processors.request",
   "django.contrib.auth.context_processors.auth", "django.contrib.messages.context_processors.messages"]}}]
-MIDDLEWARE = ["django.contrib.sessions.middleware.SessionMiddleware",
-  "django.contrib.auth.middleware.AuthenticationMiddleware",
-  "django.contrib.messages.middleware.MessageMiddleware"]
+MIDDLEWARE = ["django.middleware.security.SecurityMiddleware", "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware","django.contrib.sessions.middleware.SessionMiddleware",
+  "django.contrib.auth.middleware.AuthenticationMiddleware","django.contrib.messages.middleware.MessageMiddleware",
+  "django.middleware.clickjacking.XFrameOptionsMiddleware",]

@@ -1,0 +1,22 @@
+{% extends "web/base.html" %}
+{% block body_class %}app mother{% endblock %}
+{% block header %}
+<header class="app-top"><div class="wrap-wide app-top-in">
+  <a class="brand" href="{% url 'web:mother_home' %}" aria-label="Reach, your dashboard">
+    <svg width="26" height="26" viewBox="0 0 30 30" aria-hidden="true" fill="none"><circle cx="8" cy="15" r="4.5" fill="currentColor"/><path d="M15 8a10 10 0 0 1 0 14M21 4a16 16 0 0 1 0 22" stroke="#b3402d" stroke-width="2.4" stroke-linecap="round"/></svg>
+    Reach</a>
+  <nav class="app-top-right" aria-label="Your account">
+    <a class="top-link" href="{% url 'web:mother_home' %}">My dashboard</a>
+    <a class="top-link" href="{% url 'web:mother_book' %}">Book a visit</a>
+    <form method="post" action="{% url 'web:mother_signout' %}">{% csrf_token %}<button class="linklike" type="submit">Sign out</button></form>
+  </nav>
+</div></header>
+{% endblock %}
+{% block content %}
+<div class="wrap mother-wrap">
+  {% if mother.is_synthetic %}<p class="banner" role="note"><strong>Synthetic data.</strong> This is a test mother. Nothing here is a real person's information.</p>{% endif %}
+  {% include "web/_messages.html" %}
+  {% block m %}{% endblock %}
+</div>
+{% endblock %}
+{% block footer %}<footer class="app-foot"><div class="wrap small"><strong>Reach is not a doctor and not an emergency service.</strong> If you feel very unwell or are worried about you or your baby, go to the nearest health facility now. Do not wait for a reply here.</div></footer>{% endblock %}

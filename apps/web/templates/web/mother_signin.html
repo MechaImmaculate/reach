@@ -1,0 +1,29 @@
+{% extends "web/base.html" %}
+{% block title %}Mother sign-in · Reach{% endblock %}
+{% block content %}
+<section class="auth"><div class="wrap">
+  <div class="auth-card card">
+    <h1>{% if step == "phone" %}Sign in{% else %}Enter your code{% endif %}</h1>
+    {% include "web/_messages.html" %}
+    {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+    {% if step == "phone" %}
+      <p class="small">For mothers whose clinic has set up a Reach account. We will text a 6-digit code to the phone number your clinic has for you. No password needed.</p>
+      <form method="post" novalidate>{% csrf_token %}
+        <div class="field"><label for="id_phone">Your phone number</label>
+          <input id="id_phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0712 345 678" required autofocus></div>
+        <button class="btn btn-primary" type="submit" style="width:100%">Send me a code</button>
+      </form>
+      <p class="small" style="margin-top:1rem">Not set up yet? Ask your clinic or community health worker to enable your account. Reach is not an emergency service: if you feel very unwell, go to the nearest health facility.</p>
+    {% else %}
+      <p class="small">If <strong>{{ shown }}</strong> is registered, a code is on its way. It works for 10 minutes.</p>
+      <form method="post" novalidate>{% csrf_token %}
+        <div class="field"><label for="id_code">6-digit code</label>
+          <input id="id_code" name="code" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" required autofocus></div>
+        <button class="btn btn-primary" type="submit" style="width:100%">Sign in</button>
+      </form>
+      <form method="post" style="margin-top:.6rem">{% csrf_token %}<input type="hidden" name="action" value="resend"><button class="linklike" type="submit">Send a new code</button></form>
+      <p class="small"><a href="{% url 'web:mother_signin' %}">Use a different number</a></p>
+    {% endif %}
+  </div>
+</div></section>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "web/workspace.html" %}
+{% block title %}Appointments · Reach{% endblock %}
+{% block page %}
+{% if active_facility.is_synthetic %}<p class="banner" role="note"><strong>Synthetic data.</strong> {{ active_facility.name }} is a test facility.</p>{% endif %}
+<h1 class="app-h1">Appointments and availability</h1>
+<p class="lede">Open times for mothers to book at {{ active_facility.name }}, and the visits they have booked.</p>
+{% if not verified %}<p class="form-error" role="note">Your provider profile is not verified yet, so mothers cannot see or book your times. A facility administrator can verify it.</p>{% endif %}
+
+<section class="card" aria-labelledby="add-h">
+  <h2 id="add-h">Open times</h2>
+  <form method="post" class="slot-form">{% csrf_token %}<input type="hidden" name="action" value="add">
+    <div class="field"><label for="d">Date</label><input id="d" name="day" type="date" required></div>
+    <div class="field"><label for="s">From</label><input id="s" name="start" type="time" required value="09:00"></div>
+    <div class="field"><label for="e">To</label><input id="e" name="end" type="time" required value="12:00"></div>
+    <div class="field"><label for="m">Slot length</label><select id="m" name="minutes">{% for n in minutes %}<option value="{{ n }}"{% if n == 30 %} selected{% endif %}>{{ n }} minutes</option>{% endfor %}</select></div>
+    <div class="field"><label for="md">Visit mode</label><select id="md" name="mode">{% for v, l in modes %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
+    <div class="field"><button class="btn btn-primary" type="submit">Publish times</button></div>
+  </form>
+  <p class="small">Audio and video visit modes appear here once calls are built.</p>
+</section>
+
+<section class="card" aria-labelledby="slots-h" style="margin-top:1rem">
+  <h2 id="slots-h">Your upcoming open times</h2>
+  {% if slot_rows %}<ul class="rows">
+    {% for r in slot_rows %}<li><span>{{ r.slot.starts_at|date:"D j M" }} · {{ r.slot.starts_at|time:"H:i" }}–{{ r.slot.ends_at|time:"H:i" }} · {{ r.slot.get_mode_display }}</span>
+      {% if r.taken %}<span class="chip chip--built">✓ Booked</span>
+      {% else %}<span class="chip">Open</span><form method="post">{% csrf_token %}<input type="hidden" name="action" value="close"><input type="hidden" name="slot" value="{{ r.slot.pk }}"><button class="linklike" type="submit">Close</button></form>{% endif %}</li>{% endfor %}
+  </ul>{% else %}<p>You have no upcoming open times.</p>{% endif %}
+</section>
+
+<section class="card" aria-labelledby="appts-h" style="margin-top:1rem">
+  <h2 id="appts-h">Booked visits at this facility</h2>
+  {% if appts %}<ul class="rows">
+    {% for a in appts %}<li><span>{{ a.scheduled_for|date:"D j M" }} · {{ a.scheduled_for|time:"H:i" }} · {{ a.mother.short_code }} · {{ a.mother.full_name }} · {{ a.get_type_display }}{% if a.provider %} · {{ a.provider.full_name }}{% endif %}</span>
+      <span class="chip">{{ a.get_status_display }}</span></li>{% endfor %}
+  </ul>{% else %}<p>No upcoming booked visits.</p>{% endif %}
+  <p class="small">Marking a visit attended or missed arrives in a later step. Overdue and missed are operational flags, not clinical judgements.</p>
+</section>
+{% endblock %}

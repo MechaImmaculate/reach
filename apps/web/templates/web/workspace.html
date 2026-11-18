@@ -1,0 +1,41 @@
+{% extends "web/app_base.html" %}
+{% block title %}{{ ws.title }} · Reach{% endblock %}
+{% block content %}
+<div class="wrap-wide app-grid">
+  <nav class="side-nav" aria-label="{{ ws.label }} workspace">
+    <p class="side-title">{{ ws.label }}</p>
+    <ul>
+      {% for label, url_name in nav %}
+        {% if url_name %}<li><a href="{% url url_name %}"{% if url_name == current %} aria-current="page"{% endif %}>{{ label }}</a></li>
+        {% else %}<li><span class="nav-soon" aria-disabled="true">{{ label }} <small>Soon</small></span></li>{% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+  <div class="app-main">
+    {% include "web/_messages.html" %}
+    {% block page %}
+    {% if active_facility.is_synthetic %}<p class="banner" role="note"><strong>Synthetic data.</strong> {{ active_facility.name }} is a test facility. Nothing here is real patient information.</p>{% endif %}
+    <h1 class="app-h1">{{ ws.title }}</h1>
+    <p class="lede">{{ ws.blurb }}</p>
+
+    {% if tiles %}
+      <div class="tiles">
+        {% for t in tiles %}<div class="tile"><p class="tile-n">{{ t.value }}</p><p class="tile-l">{{ t.label }}</p>{% if t.note %}<p class="tile-note">{{ t.note }}</p>{% endif %}</div>{% endfor %}
+      </div>
+    {% elif workspace_key == "system" %}
+      <div class="card"><h3>Admin console</h3><p>Manage accounts and configuration in the <a href="/admin/">admin console</a> (requires staff access).</p></div>
+    {% else %}
+      <div class="card"><h3>This workspace is being built</h3><p>The screens in the menu marked "Soon" arrive in later steps. Your access and scope are already enforced.</p></div>
+    {% endif %}
+
+    <section class="card access" aria-labelledby="access-h">
+      <h2 id="access-h">What you can see</h2>
+      <p>{{ ws.scope_note }}</p>
+      <ul class="access-list">
+        {% for m in memberships %}<li><strong>{{ m.get_role_display }}</strong> · {% if m.facility %}{{ m.facility.name }}{% else %}{{ m.admin_area.name }}{% endif %}{% if m.valid_to %} · until {{ m.valid_to|date:"j M Y" }}{% endif %}</li>{% endfor %}
+      </ul>
+    </section>
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,213 @@
+{% extends "web/base.html" %}
+{% block content %}
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Maternal care coordination · Proof of concept</p>
+      <h1>Bridging the distance between mothers and maternal healthcare.</h1>
+      <p class="lede">Reach connects a mother's concern to a real clinician, connects that clinician to the right facility, and makes sure the next step in her care is not lost. It is designed to work on a basic phone as well as a smartphone.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#journey">See how it works</a>
+        <a class="btn btn-ghost" href="#partners">For partners and funders</a>
+      </div>
+    </div>
+
+    <aside class="trace-card" aria-label="Illustrative care journey">
+      <p class="tag">Illustrative example · synthetic · not real data</p>
+      <ol class="trace">
+        <li><span class="dot">1</span><strong>A concern arrives</strong><span>By message, a requested call, or a community health worker.</span></li>
+        <li><span class="dot">2</span><strong>A clinician reviews it</strong><span>Suggestions help organise the queue. The clinician decides.</span></li>
+        <li><span class="dot">3</span><strong>Referral to a facility with the service</strong><span>Chosen from a verified directory and tracked.</span></li>
+        <li><span class="dot loop">✓</span><strong>Outcome recorded, follow-up set</strong><span>The loop is closed, not just a message sent.</span></li>
+      </ol>
+    </aside>
+  </div>
+</section>
+
+<section id="signin" class="band" aria-labelledby="signin-h">
+  <div class="wrap">
+    <div class="section-head"><h2 id="signin-h">Where would you like to go?</h2></div>
+    <div class="grid grid-3">
+      <a class="card" href="/accounts/login/">
+        <h3>Clinicians and facility teams</h3>
+        <p>Review incoming concerns, arrange calls, create and track referrals.</p>
+        <p class="card-link">Sign in →</p>
+      </a>
+      <a class="card" href="/accounts/login/">
+        <h3>Community health workers</h3>
+        <p>See the mothers assigned to you, log visits, raise a concern on her behalf.</p>
+        <p class="card-link">Sign in →</p>
+      </a>
+      <a class="card" href="{% url 'web:mother_signin' %}">
+        <h3>Mothers</h3>
+        <p>Sign in with your phone number to see your visits and your baby's details, book a time with your clinic, and keep your own record in one place.</p>
+        <p class="card-link">Mother sign-in →</p>
+        <p class="gap">No smartphone? Your clinic or community health worker can reach you by text message or phone call (<span class="chip chip--planned">◌ Planned</span>). Reach does not replace a clinician or emergency care. If you feel very unwell, go to the nearest health facility.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="gaps-h">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">The problem</p>
+      <h2 id="gaps-h">Maternal care is a journey, and it breaks in five places.</h2>
+      <p class="lede">These gaps are connected, so Reach is built as one system rather than five separate tools.</p>
+    </div>
+    <div class="grid grid-5">
+      <div class="card"><h3>Communication</h3><p class="gap">Mothers cannot reliably reach a provider between visits.</p><p class="does">Several channels, including ordinary phone calls.</p></div>
+      <div class="card"><h3>Continuity</h3><p class="gap">Follow-ups and appointments are missed.</p><p class="does">Care plans, attendance records and follow-up tasks.</p></div>
+      <div class="card"><h3>Geography</h3><p class="gap">Hard to know which facility can help, and how far it is.</p><p class="does">A verified service directory and estimated travel, for clinicians.</p></div>
+      <div class="card"><h3>Referral</h3><p class="gap">A mother is told to go somewhere and nobody checks.</p><p class="does">Issued, acknowledged, arrived, outcome: every step tracked.</p></div>
+      <div class="card"><h3>Information</h3><p class="gap">Providers lack one view of what happened.</p><p class="does">One record of messages, decisions and follow-up.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="journey" class="band" aria-labelledby="journey-h">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">How it works</p>
+      <h2 id="journey-h">One mother, one coordinated journey.</h2>
+      <p class="lede">She experiences a single service. Clinicians and county teams each see a different view built for their job.</p>
+    </div>
+    <ol class="steps">
+      <li><strong>She is registered</strong> at a clinic or by a community health worker, with her consent, preferred language and preferred channel.</li>
+      <li><strong>Routine messages and reminders</strong> reach her on the channel she can actually use.</li>
+      <li><strong>She raises a concern</strong> or asks for a call back, without needing airtime or a smartphone.</li>
+      <li><strong>A clinician reviews it.</strong> Automated suggestions help organise the queue. They never decide, and never dismiss a concern.</li>
+      <li><strong>The clinician chooses the pathway:</strong> a remote consultation, a scheduled visit, or in-person assessment.</li>
+      <li><strong>If she must be seen,</strong> Reach shows facilities with the verified service, and the referral is tracked until she is received.</li>
+      <li><strong>The outcome is recorded</strong> and the next follow-up is scheduled. The loop is closed.</li>
+    </ol>
+  </div>
+</section>
+
+<section id="channels" aria-labelledby="channels-h">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Channels</p>
+      <h2 id="channels-h">Built around the phone she already has.</h2>
+      <p class="lede">The ordinary phone call comes first, because it works without a smartphone or mobile data. Video is never the default.</p>
+    </div>
+    <div class="grid grid-4">
+      <div class="card"><h3>SMS</h3><p>Messages, reminders and referral instructions on any phone.</p><span class="chip chip--planned">◌ Planned</span></div>
+      <div class="card"><h3>Ordinary voice calls</h3><p>The clinic calls her back on a normal phone line.</p><span class="chip chip--planned">◌ Planned</span></div>
+      <div class="card"><h3>Audio consultation</h3><p>One-to-one over the internet where connectivity allows.</p><span class="chip chip--planned">◌ Planned</span></div>
+      <div class="card"><h3>Video consultation</h3><p>Only where it is appropriate, with audio and phone fallback.</p><span class="chip chip--planned">◌ Planned</span></div>
+    </div>
+    <p class="small" style="margin-top:1.2rem">Messages are shown honestly as queued, submitted, sent, delivered or failed. A message that was only submitted is never presented as delivered.</p>
+  </div>
+</section>
+
+<section class="band" aria-labelledby="gis-h">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="eyebrow">Geography that does a job</p>
+        <h2 id="gis-h">Maps that help decide, not just decorate.</h2>
+        <p>Reach keeps a directory of facilities and the services each one has been verified to offer. When a clinician decides a mother must be seen in person, the destination is chosen for the service it provides first, and distance second.</p>
+        <p>County teams see coverage and follow-up patterns by ward, with small counts hidden. Individual households are never shown on a dashboard.</p>
+        <p class="small">Travel times are estimates, always labelled as such.</p>
+      </div>
+      <figure class="card illus" style="margin:0" aria-label="Illustration of facilities and a referral route">
+        <svg viewBox="0 0 360 240" width="100%" role="img" aria-labelledby="gis-t"><title id="gis-t">Illustration: three facilities connected by referral routes, one marked as having the required service</title>
+          <rect width="360" height="240" rx="12" fill="#f2e8d8"/>
+          <path d="M40 190 C110 150 150 170 200 110 S300 60 330 40" stroke="#cdbf9f" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M40 190 C110 150 150 170 200 110" stroke="#1d5556" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round" fill="none"/>
+          <circle cx="40" cy="190" r="12" fill="#0f3d3e"/><text x="16" y="226" text-anchor="start" font-size="13" fill="#17302f">Health centre</text>
+          <circle cx="200" cy="110" r="14" fill="#b3402d"/><path d="M193 110l5 5 9-10" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="214" y="84" text-anchor="end" font-size="13" fill="#17302f">Has the service</text>
+          <circle cx="330" cy="40" r="12" fill="#6f8c8c"/><text x="346" y="20" text-anchor="end" font-size="13" fill="#17302f">Not verified</text>
+        </svg>
+        <figcaption class="small" style="margin-top:.6rem">Illustrative only. Not a real location.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="human-h">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Clinician-led</p>
+      <h2 id="human-h">The software suggests. A clinician decides.</h2>
+    </div>
+    <div class="split">
+      <div class="panel panel--auto">
+        <h3>◌ Automated suggestion</h3>
+        <ul>
+          <li>Helps organise and label incoming messages.</li>
+          <li>Says when it is not sure, and asks for a human.</li>
+          <li>Is kept separate from the clinical record.</li>
+          <li>Never reassures a mother, and never removes a concern from the queue.</li>
+        </ul>
+      </div>
+      <div class="panel panel--human">
+        <h3>✓ Clinical decision</h3>
+        <ul>
+          <li>Made and recorded by a verified clinician.</li>
+          <li>Confirms or overrides a suggestion, with a reason.</li>
+          <li>Chooses the pathway and the referral destination.</li>
+          <li>Every step is traceable.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="status" class="band" aria-labelledby="status-h">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Honest status</p>
+      <h2 id="status-h">Where Reach is today.</h2>
+      <p class="lede">A proof of concept built on synthetic data. There are no real users, no pilot and no results yet, and we would rather say so plainly.</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card status-col status-built"><h3><span class="chip chip--built">✓ Built</span></h3>
+        <ul>
+          <li>Care-coordination data model, with geographic support</li>
+          <li>Consent checks before messages and referrals</li>
+          <li>Append-only records for messages, decisions and referrals</li>
+          <li>Clinician-only decisions, kept apart from suggestions</li>
+        </ul></div>
+      <div class="card status-col status-next"><h3><span class="chip chip--next">→ In progress</span></h3>
+        <ul>
+          <li>Clinician review queue and dashboards</li>
+          <li>Facility directory and referral board</li>
+          <li>Mother dashboard: visits, baby, booking with clinic availability</li>
+          <li>Community health worker view</li>
+        </ul></div>
+      <div class="card status-col status-not"><h3><span class="chip chip--planned">○ Not yet</span></h3>
+        <ul>
+          <li>Real SMS and voice integration, including sign-in codes by text</li>
+          <li>In-app audio and video consultations</li>
+          <li>Mother documents and messaging with the clinic</li>
+          <li>Clinician review of the triage rules</li>
+          <li>A signed pilot facility</li>
+          <li>Data-protection review</li>
+          <li>Any real-user results</li>
+        </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="partners" aria-labelledby="partners-h">
+  <div class="wrap">
+    <div class="cta-band">
+      <p class="eyebrow" style="color:#f3c3b9">For partners and funders</p>
+      <h2 id="partners-h">Help us take Reach from proof of concept to a careful pilot.</h2>
+      <p>The next steps depend on people who know maternal care better than software does.</p>
+      <ul>
+        <li>A clinician to review the triage categories and escalation rules.</li>
+        <li>An introduction to a facility willing to run a small, supervised pilot.</li>
+        <li>Support meeting health-data and safety requirements.</li>
+        <li>Pilot funding that covers telephony and video, not only software.</li>
+      </ul>
+      {% if contact_email %}<div class="btn-row"><a class="btn btn-primary" href="mailto:{{ contact_email }}">Get in touch</a></div>{% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

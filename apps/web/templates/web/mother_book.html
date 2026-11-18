@@ -1,0 +1,27 @@
+{% extends "web/mother_app_base.html" %}
+{% block title %}Book a visit · Reach{% endblock %}
+{% block m %}
+<h1 class="app-h1">Book a visit</h1>
+<p class="lede">Pick a time your clinic has opened. You can cancel from your dashboard up to 2 hours before.</p>
+{% if days %}
+<form method="post" class="book">{% csrf_token %}
+  <div class="field"><label for="id_type">Type of visit</label>
+    <select id="id_type" name="type">{% for v, l in types %}<option value="{{ v }}"{% if v == default_type %} selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  {% for day, slots in days %}
+    <fieldset class="slots"><legend>{{ day|date:"l j F" }}</legend>
+      <div class="slot-grid">
+      {% for s in slots %}
+        <label class="slot"><input type="radio" name="slot" value="{{ s.pk }}" required>
+          <span><strong>{{ s.starts_at|time:"H:i" }}</strong><small>{{ s.facility.name }}<br>with {{ s.provider.full_name }}</small></span></label>
+      {% endfor %}
+      </div>
+    </fieldset>
+  {% endfor %}
+  <button class="btn btn-primary" type="submit">Book this visit</button>
+</form>
+{% else %}
+<div class="card"><p><strong>No times are open to book right now.</strong></p>
+<p>Your clinic has not opened any times yet, or they are all taken. Please call your clinic, or check again later.</p>
+<p><a class="btn btn-ghost" href="{% url 'web:mother_home' %}">Back to my dashboard</a></p></div>
+{% endif %}
+{% endblock %}

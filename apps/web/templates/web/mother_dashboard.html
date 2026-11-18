@@ -1,0 +1,63 @@
+{% extends "web/mother_app_base.html" %}
+{% block title %}My dashboard · Reach{% endblock %}
+{% block m %}
+<h1 class="app-h1">Hello{% if first_name %}, {{ first_name }}{% endif %}</h1>
+<p class="lede">Your visits, your baby and your clinic, in one place.</p>
+
+<div class="mgrid">
+  <section class="card" aria-labelledby="visits-h">
+    <h2 id="visits-h">Your next visits</h2>
+    {% for a in upcoming %}
+      <div class="appt">
+        <p class="appt-when">{{ a.scheduled_for|date:"l j F" }} · {{ a.scheduled_for|time:"H:i" }}</p>
+        <p>{{ a.get_type_display }} visit · {{ a.facility.name }}{% if a.provider %} · with {{ a.provider.full_name }}{% endif %}</p>
+        <p><span class="chip">{{ a.get_mode_display }}</span> <span class="chip chip--built">✓ {{ a.get_status_display }}</span></p>
+        {% if a.can_cancel %}<form method="post" action="{% url 'web:mother_cancel' %}">{% csrf_token %}<input type="hidden" name="appointment" value="{{ a.pk }}"><button class="linklike" type="submit">Cancel this visit</button></form>
+        {% else %}<p class="small">To change this visit now, please call your clinic.</p>{% endif %}
+      </div>
+    {% empty %}<p>You have no visits booked.</p>{% endfor %}
+    <p><a class="btn btn-primary" href="{% url 'web:mother_book' %}">Book a visit</a></p>
+  </section>
+
+  <section class="card" aria-labelledby="preg-h">
+    <h2 id="preg-h">{% if episode.status == "active" %}Your pregnancy{% elif episode %}Your care{% else %}Your care{% endif %}</h2>
+    {% if episode %}
+      <ul class="plain">
+        <li><strong>Status:</strong> {{ episode.get_status_display }}</li>
+        {% if weeks is not None %}<li><strong>Weeks:</strong> about {{ weeks }} (from the date your clinic recorded)</li>{% endif %}
+        {% if episode.edd_date %}<li><strong>Expected date:</strong> {{ episode.edd_date|date:"j F Y" }}</li>{% endif %}
+        <li><strong>Your clinic:</strong> {{ episode.facility.name }}</li>
+      </ul>
+      {% if plan and plan.summary %}<p><strong>Your care plan</strong> (written by your clinician)</p><p>{{ plan.summary|linebreaksbr }}</p>{% endif %}
+      <p class="small">These details were entered by your clinic. If something looks wrong, tell your clinic.</p>
+    {% else %}<p>Your clinic has not registered a pregnancy or recovery for you yet.</p>{% endif %}
+  </section>
+
+  <section class="card" aria-labelledby="baby-h">
+    <h2 id="baby-h">Your baby</h2>
+    {% for b in babies %}
+      <p><strong>Born {{ b.birth_date|date:"j F Y" }}</strong>{% if b.sex %} · {{ b.sex|capfirst }}{% endif %}<br>
+      <span class="small">{% if b.age_days < 1 %}Born today{% elif b.age_days < 14 %}{{ b.age_days }} day{{ b.age_days|pluralize }} old{% else %}about {{ b.age_days|floatformat:0 }} days old{% endif %}</span></p>
+    {% empty %}<p>No baby is registered yet.</p>{% endfor %}
+    <p class="small">Immunisation and growth records are not in Reach yet.</p>
+  </section>
+
+  <section class="card" aria-labelledby="clinic-h">
+    <h2 id="clinic-h">Reach your clinic</h2>
+    <ul class="chan">
+      <li><span>Book a visit</span><span class="chip chip--built">✓ Available</span></li>
+      <li><span>Message your clinic</span><span class="chip chip--planned">◌ Planned</span></li>
+      <li><span>Voice call with a clinician</span><span class="chip chip--planned">◌ Planned</span></li>
+      <li><span>Video call with a clinician</span><span class="chip chip--planned">◌ Planned</span></li>
+      <li><span>My documents</span><span class="chip chip--planned">◌ Planned</span></li>
+    </ul>
+    <p class="small">Calls and messages will never be the way to get urgent help. If you feel very unwell, go to the nearest health facility.</p>
+  </section>
+
+  <section class="card mwide" aria-labelledby="hist-h">
+    <h2 id="hist-h">Your visit history</h2>
+    {% if past %}<ul class="plain">{% for a in past %}<li>{{ a.scheduled_for|date:"j M Y" }} · {{ a.get_type_display }} · {{ a.facility.name }} · <span class="small">{{ a.get_status_display }}</span></li>{% endfor %}</ul>
+    {% else %}<p>Nothing here yet.</p>{% endif %}
+  </section>
+</div>
+{% endblock %}
